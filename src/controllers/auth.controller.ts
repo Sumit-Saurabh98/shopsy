@@ -39,7 +39,7 @@ export const signup = async (req: Request, res: Response) => {
       message: "Account created successfully",
     });
   } catch (error) {
-    console.log(error);
+    console.log("Error in signup:", error);
     res.status(500).json({ message: "Internal server error: " + error });
   }
 };
@@ -68,7 +68,7 @@ export const login = async (req: Request, res: Response) => {
       message: "Logged in successfully",
     });
   } catch (error) {
-    console.log(error);
+    console.log("Error in login:", error);
     res.status(500).json({ message: "Internal server error: " + error });
   }
 };
@@ -86,7 +86,7 @@ export const logout = async (req: Request, res: Response) => {
         res.clearCookie("_shopsy_refreshToken");
         res.status(200).json({ message: "Logged out successful" });
     } catch (error) {
-        console.log(error);
+        console.log("Error in logout:", error);
         res.status(500).json({ message: "Internal server error: " + error });
     }
 };
@@ -124,7 +124,7 @@ export const refreshAccessToken = async (req: Request, res: Response) => {
 //         const user = req.user;
 //         res.status(200).json({ user });
 //     } catch (error) {
-//         console.log(error);
+//         console.log("Error in getting profile:", error);
 //         res.status(500).json({ message: "Internal server error: " + error });
 //     }
 // };

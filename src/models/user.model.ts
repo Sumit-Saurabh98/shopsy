@@ -1,19 +1,6 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
-
-interface ICartItem {
-	quantity: number;
-	product: mongoose.Schema.Types.ObjectId;
-}
-
-interface IUser {
-	name: string;
-	email: string;
-	password: string;
-	cartItems: ICartItem[];
-	role: "customer" | "admin";
-    comparePassword: (password: string) => Promise<boolean>;
-}
+import { IUser } from "../lib/interfaces.js";
 
 const userSchema = new mongoose.Schema(
 	{
@@ -39,7 +26,7 @@ const userSchema = new mongoose.Schema(
 					type: Number,
 					default: 1,
 				},
-				product: {
+				productId: {
 					type: mongoose.Schema.Types.ObjectId,
 					ref: "Product",
 				},
