@@ -31,3 +31,14 @@ export interface ICoupon {
     isActive: boolean;
     userId: string;
 }
+
+export interface IOrder {
+    userId: string;
+    products: {
+        productId: string;
+        quantity: number;
+        price: number;
+    }[];
+    totalAmount: number;
+    stripeSessionId: string;
+}
