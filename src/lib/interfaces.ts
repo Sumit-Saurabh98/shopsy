@@ -23,3 +23,11 @@ export interface IUser {
     category: string;
     isFeatured: boolean;
 }
+
+export interface ICoupon {
+    code: string;
+    discountPercentage: number;
+    expirationDate: Date;
+    isActive: boolean;
+    userId: string;
+}
