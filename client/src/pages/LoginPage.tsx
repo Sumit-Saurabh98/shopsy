@@ -2,15 +2,18 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { LogIn, Mail, Lock, ArrowRight, Loader } from "lucide-react";
+import { useUserStore } from "../stores/useUserStore";
 
 const LoginPage = () => {
-  const loading = true;
-  const [email, setEmail] = useState("");
-	const [password, setPassword] = useState("");
+   const {login, loginLoading} = useUserStore();
+  const [email, setEmail] = useState<string>("");
+	const [password, setPassword] = useState<string>("");
 
   const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
-		console.log(email, password);
+		login(email, password);
+    setEmail("");
+    setPassword("");
 	};
 
 
@@ -95,9 +98,9 @@ const LoginPage = () => {
 							rounded-md shadow-sm text-sm font-medium text-white bg-emerald-600
 							 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2
 							  focus:ring-emerald-500 transition duration-150 ease-in-out disabled:opacity-50"
-              disabled={loading}
+              disabled={loginLoading}
             >
-              {loading ? (
+              {loginLoading ? (
                 <>
                   <Loader
                     className="mr-2 h-5 w-5 animate-spin"
