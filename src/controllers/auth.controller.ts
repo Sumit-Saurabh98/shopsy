@@ -119,12 +119,12 @@ export const refreshAccessToken = async (req: Request, res: Response) => {
 
 // TODO: add get profile
 
-// export const getProfile = async (req: Request, res: Response) => {
-//     try {
-//         const user = req.user;
-//         res.status(200).json({ user });
-//     } catch (error) {
-//         console.log("Error in getting profile:", error);
-//         res.status(500).json({ message: "Internal server error: " + error });
-//     }
-// };
+export const getProfile = async (req: Request, res: Response) => {
+    try {
+        const user = req.user;
+        res.status(200).json({ user });
+    } catch (error) {
+        console.log("Error in getting profile:", error);
+        res.status(500).json({ message: "Internal server error: " + error });
+    }
+};
