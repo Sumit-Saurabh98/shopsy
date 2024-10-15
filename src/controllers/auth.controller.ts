@@ -117,8 +117,6 @@ export const refreshAccessToken = async (req: Request, res: Response) => {
     }
 };
 
-// TODO: add get profile
-
 export const getProfile = async (req: Request, res: Response) => {
     try {
         const user = req.user;
