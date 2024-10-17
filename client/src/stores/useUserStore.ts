@@ -22,6 +22,8 @@ export interface IUserStore {
     password: string,
   ) => Promise<void>;
 
+  logout: () => Promise<void>;
+
   checkAuth: () => Promise<void>;
 }
 
@@ -89,6 +91,20 @@ export const useUserStore = create<IUserStore>((set) => ({
     }
   },
 
+  logout: async () => {
+    try {
+      await axiosInstance.post("/auth/logout");
+      set({ user: null });
+    } catch (error: unknown) {
+      console.error(error);
+      set({ loginLoading: false });
+      const axiosError = error as {
+        response?: { data?: { message?: string } };
+      };
+      toast.error(axiosError.response?.data?.message || "Something went wrong");
+    }
+  },
+
   checkAuth: async () =>{
     set({ checkingAuth: true, checkAuthLoading: true });
     try {
@@ -97,12 +113,10 @@ export const useUserStore = create<IUserStore>((set) => ({
     } catch (error: unknown) {
       console.error(error);
       set({ user: null, checkingAuth: false, checkAuthLoading: false });
-      const axiosError = error as {
-        response?: { data?: { message?: string } };
-      };
-      toast.error(axiosError.response?.data?.message || "Something went wrong");
     }finally{
         set({ checkAuthLoading: false });
     }
   },
 }));
+
+// TODO: implement the axios interceptors for refreshing access token in every 15 minutes
