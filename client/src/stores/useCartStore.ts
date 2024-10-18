@@ -24,7 +24,7 @@ export const useCartStore = create<ICartStore>((set, get) => ({
   getCartItems: async () => {
     try {
       const res = await axiosInstance.get("/cart");
-      set({ cart: res.data.cart });
+      set({ cart: res.data.cartItems });
       get().calculateTotals();
     } catch (error: unknown) {
       set({ cart: [] });

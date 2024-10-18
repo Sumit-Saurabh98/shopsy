@@ -46,12 +46,13 @@ export const addToCart = async (req: Request, res: Response) => {
 
 export const getCartProducts = async (req: Request, res: Response) => {
     try {
-        const products = await Product.find({_id: {$in: req.user?.cartItems}});
+        // const products = await Product.find({ _id: { $in: req.user?.cartItems } });
+        const products = await Product.find({_id: { $in: req.user?.cartItems.map(item => item.productId) } });
 
         // add quantity property to each product
         const cartItems = products.map((product) => {
             const item = req.user?.cartItems.find(
-                (item) => item.productId.toString() === product._id.toString()
+                (cartItem) => cartItem.productId.toString() === product.id.toString()
             )
 
             return {
