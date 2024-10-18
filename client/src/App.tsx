@@ -7,6 +7,7 @@ import Navbar from "./components/Navbar";
 import { useUserStore } from "./stores/useUserStore";
 import { useEffect } from "react";
 import LoadingSpinner from "./components/LoadingSpinner";
+import AdminPage from "./pages/AdminPage";
 
 function App() {
 	const {checkAuth, user, checkingAuth} = useUserStore();
@@ -34,6 +35,7 @@ function App() {
 					<Route path='/' element={user ? <HomePage /> : <Navigate to='/login' />} />
 					<Route path='/signup' element={!user ? <SignUpPage /> : <Navigate to='/' />} />
 					<Route path='/login' element={!user ? <LoginPage /> : <Navigate to='/' />} />
+					<Route path='/admin-dashboard' element={user && user?.role === "admin" ? <AdminPage /> : <Navigate to='/login' />} />
 				</Routes>
 			</div>
 			<Toaster />

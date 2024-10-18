@@ -153,7 +153,7 @@ export const toggleFeaturedProduct = async (req: Request, res: Response) =>{
         // Cache the updated product in Redis
         await updateFeaturedProductsCache();
 
-        res.status(200).json({ updatedProduct });
+        res.status(200).json({ product: updatedProduct });
     } catch (error) {
         console.log("Error in toggleFeaturedProduct:", error);
         res.status(500).json({ message: "Internal server error: " + error });

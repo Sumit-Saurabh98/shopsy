@@ -19,3 +19,9 @@ export interface ISignUp {
   password: string;
   confirmPassword: string;
 }
+
+export interface ICategory {
+  href: string;
+  name: string;
+  imageUrl: string;
+}
