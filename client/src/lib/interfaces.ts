@@ -25,3 +25,23 @@ export interface ICategory {
   name: string;
   imageUrl: string;
 }
+
+export interface IProduct{
+  _id?: string;
+  name: string;
+  description: string;
+  price: number;
+  image: string;
+  category: string;
+  isFeatured?: boolean;
+  quantity?: number;
+}
+
+
+export interface ICoupon {
+    code: string;
+    discountPercentage: number;
+    expirationDate: Date;
+    isActive: boolean;
+    userId: string;
+}

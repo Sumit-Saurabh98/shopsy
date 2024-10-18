@@ -20,6 +20,7 @@ interface IProductStore {
   fetchAllProducts: () => Promise<void>;
   deleteProduct: (productId: string) => void;
   toggleFeaturedProduct: (productId: string) => Promise<void>;
+  fetchProductByCategory: (category: string) => Promise<void>;
 }
 
 export const useProductStore = create<IProductStore>((set) => ({
@@ -52,6 +53,22 @@ export const useProductStore = create<IProductStore>((set) => ({
     set({ loading: true });
     try {
       const res = await axiosInstance.get("/products");
+      set({ products: res.data.products });
+      set({ loading: false });
+    } catch (error: unknown) {
+      console.error(error);
+      set({ loading: false });
+      const axiosError = error as {
+        response?: { data?: { message?: string } };
+      };
+      toast.error(axiosError.response?.data?.message || "Something went wrong");
+    }
+  },
+
+  fetchProductByCategory: async (category) => {
+    set({ loading: true });
+    try {
+      const res = await axiosInstance.get(`/products/category/${category}`);
       set({ products: res.data.products });
       set({ loading: false });
     } catch (error: unknown) {
