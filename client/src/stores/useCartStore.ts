@@ -12,6 +12,8 @@ export interface ICartStore {
     subtotal: number;
     getCartItems: () => Promise<void>;
     addToCart: (product: IProduct) => Promise<void>;
+    removeFromCart: (productId: string) => Promise<void>;
+    updateQuantity: (productId: string, quantity: number) => Promise<void>;
     calculateTotals: () => void;
 }
 
@@ -66,6 +68,33 @@ export const useCartStore = create<ICartStore>((set, get) => ({
       toast.error(axiosError.response?.data?.message || "Something went wrong");
     }
   },
+
+  removeFromCart: async (productId) => {
+		try {
+            await axiosInstance.delete(`/cart`, { data: { productId } });
+		set((prevState) => ({ cart: prevState.cart.filter((item) => item._id !== productId) }));
+		get().calculateTotals();
+        } catch (error) {
+            console.error(error);
+            const axiosError = error as {
+                response?: { data?: { message?: string } };
+            };
+            toast.error(axiosError.response?.data?.message || "Something went wrong");
+        }
+	},
+
+    updateQuantity: async (productId, quantity) => {
+		if (quantity === 0) {
+			get().removeFromCart(productId);
+			return;
+		}
+
+		await axiosInstance.put(`/cart/${productId}`, { quantity });
+		set((prevState) => ({
+			cart: prevState.cart.map((item) => (item._id === productId ? { ...item, quantity } : item)),
+		}));
+		get().calculateTotals();
+	},
 
   calculateTotals: () => {
     const {cart, coupon} = get();
