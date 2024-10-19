@@ -7,10 +7,10 @@ export const getCoupon = async (req: Request, res: Response) => {
       userId: req.user._id,
       isActive: true,
     });
-    res.status(200).json({ coupon });
-  } catch (error) {
+    res.status(200).json(coupon || null);
+  } catch (error: Error | any) {
     console.log("Error in getCoupon:", error);
-    res.status(500).json({ message: "Internal server error: " + error });
+    res.status(500).json({ message: "Server error", error: error.message });
   }
 };
 
@@ -40,8 +40,8 @@ export const validateCoupon = async (req: Request, res: Response) => {
         code: coupon.code,
         discountPercentage: coupon.discountPercentage,
       });
-  } catch (error) {
+  } catch (error: Error | any) {
     console.log("Error in validateCoupon:", error);
-    res.status(500).json({ message: "Internal server error: " + error });
+    res.status(500).json({ message: "Server error", error: error.message });
   }
 };
