@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import axiosInstance from "../lib/axios";
 import { toast } from "react-hot-toast";
-import {IUser} from "../lib/interfaces";
+import { IUser } from "../lib/interfaces";
 
 export interface IUserStore {
   user: IUser | null;
@@ -17,10 +17,7 @@ export interface IUserStore {
     confirmPassword: string
   ) => Promise<void>;
 
-  login: (
-    email: string,
-    password: string,
-  ) => Promise<void>;
+  login: (email: string, password: string) => Promise<void>;
 
   logout: () => Promise<void>;
 
@@ -34,12 +31,7 @@ export const useUserStore = create<IUserStore>((set) => ({
   checkAuthLoading: false,
   checkingAuth: true,
 
-  signup: async (
-    name,
-    email,
-    password,
-    confirmPassword
-  ) => {
+  signup: async (name, email, password, confirmPassword) => {
     set({ signUpLoading: true });
 
     if (password !== confirmPassword) {
@@ -64,15 +56,15 @@ export const useUserStore = create<IUserStore>((set) => ({
         response?: { data?: { message?: string } };
       };
       toast.error(axiosError.response?.data?.message || "Something went wrong");
-    }finally{
-        set({ signUpLoading: false });
+    } finally {
+      set({ signUpLoading: false });
     }
   },
 
   login: async (email, password) => {
     set({ loginLoading: true });
     try {
-        const res = await axiosInstance.post("/auth/login", {
+      const res = await axiosInstance.post("/auth/login", {
         email,
         password,
       });
@@ -86,8 +78,8 @@ export const useUserStore = create<IUserStore>((set) => ({
         response?: { data?: { message?: string } };
       };
       toast.error(axiosError.response?.data?.message || "Something went wrong");
-    }finally{
-        set({ loginLoading: false });
+    } finally {
+      set({ loginLoading: false });
     }
   },
 
@@ -105,18 +97,20 @@ export const useUserStore = create<IUserStore>((set) => ({
     }
   },
 
-  checkAuth: async () =>{
+  checkAuth: async () => {
     set({ checkingAuth: true, checkAuthLoading: true });
     try {
       const res = await axiosInstance.get("/auth/profile");
-      set({ user: res.data.user, checkingAuth: false, checkAuthLoading: false });
+      set({
+        user: res.data.user,
+        checkingAuth: false,
+        checkAuthLoading: false,
+      });
     } catch (error: unknown) {
       console.error(error);
       set({ user: null, checkingAuth: false, checkAuthLoading: false });
-    }finally{
-        set({ checkAuthLoading: false });
+    } finally {
+      set({ checkAuthLoading: false });
     }
   },
 }));
-
-// TODO: implement the axios interceptors for refreshing access token in every 15 minutes

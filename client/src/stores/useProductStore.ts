@@ -21,6 +21,7 @@ interface IProductStore {
   deleteProduct: (productId: string) => void;
   toggleFeaturedProduct: (productId: string) => Promise<void>;
   fetchProductByCategory: (category: string) => Promise<void>;
+  fetchFeaturedProducts: () => Promise<void>;
 }
 
 export const useProductStore = create<IProductStore>((set) => ({
@@ -118,4 +119,15 @@ export const useProductStore = create<IProductStore>((set) => ({
       toast.error(axiosError.response?.data?.message || "Something went wrong");
     }
   },
+
+  fetchFeaturedProducts: async () => {
+		set({ loading: true });
+		try {
+			const response = await axiosInstance.get("/products/featured");
+			set({ products: response.data.featuredProducts, loading: false });
+		} catch (error: unknown) {
+      console.error(error);
+      set({ loading: false });
+    }
+	},
 }));
