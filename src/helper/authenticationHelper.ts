@@ -34,7 +34,7 @@ export const setCookies = (
     httpOnly: true,
     sameSite: "strict",
     secure: process.env.NODE_ENV === "production",
-    maxAge: 0.5 * 60 * 1000,
+    maxAge: 15 * 60 * 1000,
   });
 
   res.cookie("_shopsy_refreshToken", refreshToken, {

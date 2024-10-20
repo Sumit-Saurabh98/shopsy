@@ -14,6 +14,10 @@ import { useCartStore } from "./stores/useCartStore";
 import PurchaseSuccessPage from "./pages/PurchaseSuccessPage";
 import PurchaseCancelPage from "./pages/PurchaseCancelPage";
 import Footer from "./components/Footer";
+import ContactPage from "./components/ContactPage";
+import AboutPage from "./components/AboutPage";
+import ServicesPage from "./components/ServicesPage";
+import PortfolioPage from "./components/PortfolioPage";
 
 function App() {
 	const {checkAuth, user, checkingAuth} = useUserStore();
@@ -54,6 +58,10 @@ function App() {
 						element={user ? <PurchaseSuccessPage /> : <Navigate to='/login' />}
 					/>
 					<Route path='/purchase-cancel' element={user ? <PurchaseCancelPage /> : <Navigate to='/login' />} />
+					<Route path='/contact' element={<ContactPage />} />
+					<Route path='/about' element={<AboutPage />} />
+					<Route path='/services' element={<ServicesPage />} />
+					<Route path='/portfolio' element={<PortfolioPage />} />
 				</Routes>
 				<Footer/>
 			</div>
