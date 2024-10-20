@@ -94,11 +94,11 @@ export const logout = async (req: Request, res: Response) => {
 export const refreshAccessToken = async (req: Request, res: Response) => {
     try {
         const refreshToken = req.cookies._shopsy_refreshToken;
-        console.log(refreshToken, "from refresh token backend");
         if (!refreshToken) {
             return res.status(401).json({ message: "Unauthorized user" });
         }
         const decode = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET!) as jwt.JwtPayload;
+        
         const storedRefreshToken = await redis.get(`refreshToken:${decode._id}`);
         if (!storedRefreshToken) {
             return res.status(401).json({ message: "Unauthorized user" });
@@ -109,7 +109,6 @@ export const refreshAccessToken = async (req: Request, res: Response) => {
         }
 
         const { accessToken } = generateToken(decode._id.toString());
-
         setCookies(res, accessToken, refreshToken);
         res.status(200).json({ message: "Token refreshed successfully", accessToken });
     } catch (error) {
