@@ -45,3 +45,32 @@ export interface ICoupon {
     isActive: boolean;
     userId: string;
 }
+
+interface Product {
+    productId: {
+        _id: string;
+        name: string;
+        description: string;
+        price: number;
+        image: string;
+        category: string;
+        isFeatured: boolean;
+        createdAt: string; // ISO date string
+        updatedAt: string; // ISO date string
+        v: number;
+    };
+    quantity: number;
+    price: number;
+    _id: string;
+}
+
+export interface IOrder {
+    _id: string;
+    userId: string;
+    products: Product[];
+    totalAmount: number;
+    stripeSessionId: string;
+    orderStatus: string;
+    createdAt: string; // ISO date string
+    updatedAt: string; // ISO date string
+}

@@ -18,10 +18,13 @@ import ContactPage from "./components/ContactPage";
 import AboutPage from "./components/AboutPage";
 import ServicesPage from "./components/ServicesPage";
 import PortfolioPage from "./components/PortfolioPage";
+import OrderList from "./pages/OrderList";
+import { useOrderStore } from "./stores/useOrderStore";
 
 function App() {
 	const {checkAuth, user, checkingAuth} = useUserStore();
 	const { getCartItems } = useCartStore();
+	const {fetchCustomerOrder} = useOrderStore();
 
 	useEffect(() => {
 		checkAuth();
@@ -31,7 +34,8 @@ function App() {
 		if (!user) return;
 
 		getCartItems();
-	}, [getCartItems, user]);
+		fetchCustomerOrder();
+	}, [getCartItems, user, fetchCustomerOrder]);
 
 	if (checkingAuth) return <LoadingSpinner />;
 
@@ -58,6 +62,7 @@ function App() {
 						element={user ? <PurchaseSuccessPage /> : <Navigate to='/login' />}
 					/>
 					<Route path='/purchase-cancel' element={user ? <PurchaseCancelPage /> : <Navigate to='/login' />} />
+					<Route path='/order-list' element={user ? <OrderList /> : <Navigate to='/login' />} />
 					<Route path='/contact' element={<ContactPage />} />
 					<Route path='/about' element={<AboutPage />} />
 					<Route path='/services' element={<ServicesPage />} />

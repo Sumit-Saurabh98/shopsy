@@ -41,4 +41,5 @@ export interface IOrder {
     }[];
     totalAmount: number;
     stripeSessionId: string;
+    orderStatus: string;
 }

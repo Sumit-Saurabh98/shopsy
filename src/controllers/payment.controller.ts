@@ -3,8 +3,10 @@ dotenv.config();
 import { Request, Response } from "express";
 import Coupon from "../models/coupon.model.js";
 import stripe from "../lib/stripe.js";
+import redis from "../lib/redis.js";
 import { createNewCoupon, createStripeCoupon } from "../helper/stripeHelper.js";
 import Order from "../models/order.model.js";
+import { IUser } from "../lib/interfaces.js";
 
 export const createCheckoutSession = async (req: Request, res: Response) => {
 	try {
@@ -78,6 +80,7 @@ export const createCheckoutSession = async (req: Request, res: Response) => {
 };
 
 export const checkoutSuccess = async (req: Request, res: Response) => {
+	const userId = (req.user as IUser)?._id;
     try {
         const {sessionId} = req.body;
         const session = await stripe.checkout.sessions.retrieve(sessionId);
@@ -106,6 +109,15 @@ export const checkoutSuccess = async (req: Request, res: Response) => {
                     stripeSessionId: sessionId,
                 });
                 await newOrder.save();
+
+				// update in the redis store
+
+				const cachedOrders = await redis.get(`customer_orders_${userId}`);
+				if (cachedOrders) {
+					const orders = JSON.parse(cachedOrders);
+					orders.push(newOrder);
+					await redis.set(`customer_orders_${userId}`, JSON.stringify(orders), "EX", 36000);
+				}
 
                 res.status(200).json({
                     success: true, 

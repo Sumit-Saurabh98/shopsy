@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ShoppingCart, Lock, LogOut, UserPlus, LogIn } from "lucide-react";
+import { ShoppingCart, Lock, LogOut, UserPlus, LogIn, ShoppingBagIcon } from "lucide-react";
 import { useUserStore } from "../stores/useUserStore";
 import { useCartStore } from "../stores/useCartStore";
 const Navbar = () => {
@@ -17,13 +17,6 @@ const Navbar = () => {
             Shopsy
           </Link>
           <nav className="flex flex-wrap items-center gap-4">
-            <Link
-              to={"/"}
-              className="text-gray-300 hover:text-emerald-400 transition duration-300
-					 ease-in-out"
-            >
-              Home
-            </Link>
             {user && (
               <Link
                 to={"/cart"}
@@ -53,6 +46,12 @@ const Navbar = () => {
                 <span className="hidden sm:inline">Dashboard</span>
               </Link>
             )}
+            <Link to="/order-list">
+            <button>
+              <ShoppingBagIcon className="inline-block mr-1" size={18} />
+              <span className="hidden sm:inline">Orders</span>
+            </button>
+            </Link>
             {user ? (
               <button
               onClick={logout}
