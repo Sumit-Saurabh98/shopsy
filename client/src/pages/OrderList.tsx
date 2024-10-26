@@ -3,7 +3,7 @@ import { useOrderStore } from "../stores/useOrderStore";
 import { motion } from "framer-motion";
 
 const OrderList = () => {
-  const { customerOrder, loading } = useOrderStore();
+  const { customerOrder, loadingCustomerOrder } = useOrderStore();
 
   console.log(customerOrder, "OrderList for customer orders");
 
@@ -27,7 +27,7 @@ const OrderList = () => {
 
   return (
     <div className="max-w-3xl mx-auto p-4">
-      {loading && <LoadingSpinner />}
+      {loadingCustomerOrder && <LoadingSpinner />}
       <h1 className="text-3xl font-bold mb-6 text-center text-emerald-400">
         Order History
       </h1>
@@ -40,7 +40,7 @@ const OrderList = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 20 }}
           >
-            <h2 className="text-xl font-bold mb-4">Order ID: {order._id}</h2>
+            <h2 className="text-xl font-bold mb-4 text-emerald-500"><span className="text-gray-300">Order ID:</span> {order._id}</h2>
             {order.products.map((product) => (
               <div
                 key={product._id}
@@ -52,11 +52,11 @@ const OrderList = () => {
                   className="w-24 h-24 object-cover rounded-md shadow-md mr-4"
                 />
                 <div className="flex-grow">
-                  <p className="text-lg font-semibold">
+                  <p className="text-lg font-semibold text-gray-300">
                     {product.productId.name}
                   </p>
                   <p className="text-gray-600">Quantity: {product.quantity}</p>
-                  <p className="text-gray-800 font-bold">
+                  <p className="text-gray-500 font-bold">
                     Price: ${product.price.toFixed(2)}
                   </p>
                 </div>
@@ -79,7 +79,7 @@ const OrderList = () => {
               </p>
             </div>
             {/* New Section for Total Amount and Dates */}
-            <p className="text-lg font-bold mt-4">
+            <p className="text-lg font-bold mt-4 text-gray-300">
               Total Amount: ${order.totalAmount.toFixed(2)}
             </p>
             <p className="text-gray-600">
