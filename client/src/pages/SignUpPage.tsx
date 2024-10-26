@@ -17,7 +17,6 @@ const SignUpPage = () => {
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    console.log(formData);
     signup(formData.name, formData.email, formData.password, formData.confirmPassword);
 
     setFormData({

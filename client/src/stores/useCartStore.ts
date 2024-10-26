@@ -32,7 +32,6 @@ export const useCartStore = create<ICartStore>((set, get) => ({
    getMyCoupon: async () => {
 		try {
 			const response = await axiosInstance.get("/coupons");
-            console.log(response.data, "from coupon");
 			set({ coupon: response.data });
 		} catch (error) {
 			console.error("Error fetching coupon:", error);

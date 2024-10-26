@@ -39,7 +39,6 @@ export const signup = async (req: Request, res: Response) => {
       message: "Account created successfully",
     });
   } catch (error) {
-    console.log("Error in signup:", error);
     res.status(500).json({ message: "Internal server error: " + error });
   }
 };

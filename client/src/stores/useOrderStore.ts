@@ -43,7 +43,6 @@ export const useOrderStore = create<IOrderStore>((set) => ({
         set({ loadingAllOrder: true });
         try {
             const res = await axiosInstance.get("/orders");
-            console.log(res.data.orders, "List of all orders from store")
             set({ allOrder: res.data.orders });
             set({ loadingAllOrder: false });
         } catch (error: unknown) {

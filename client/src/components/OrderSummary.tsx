@@ -7,7 +7,7 @@ import axiosInstance from "../lib/axios";
 import { useEffect, useState } from "react";
 
 
-const stripePromise = loadStripe(`${import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY}`);
+const stripePromise = loadStripe("pk_test_51PtB12070l2y1cqdc3Cgxj0h9yIcdcVXMkhVOieoK0mgu14y0K3EXgpwtTRDd2xKwIFMFmhBVmdYhJAHemJ8un7z00CeLcMQ90");
 
 const OrderSummary = () => {
   const [loading, setLoading] = useState(false);
