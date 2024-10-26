@@ -53,7 +53,7 @@ export const useProductStore = create<IProductStore>((set) => ({
   fetchAllProducts: async () => {
     set({ loading: true });
     try {
-      const res = await axiosInstance.get("/products");
+      const res = await axiosInstance.get(`/products`);
       set({ products: res.data.products });
       set({ loading: false });
     } catch (error: unknown) {

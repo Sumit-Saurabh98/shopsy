@@ -1,14 +1,21 @@
 import { motion } from "framer-motion";
 import { Trash, Star } from "lucide-react";
 import { useProductStore } from "../stores/useProductStore";
+import { useState } from "react";
 
 const ProductsList = () => {
+	const [visibleCount, setVisibleCount] = useState(7);
 	const { deleteProduct, toggleFeaturedProduct, products } = useProductStore();
 
 	console.log("products in ProductsList", products);
 
+	const loadMore = () => {
+		setVisibleCount((prevCount) => prevCount + 7); // Increase visible count by 7
+	};
+
 	return (
-		<motion.div
+		<motion.div>
+			<motion.div
 			className='bg-gray-800 shadow-lg rounded-lg overflow-hidden max-w-4xl mx-auto'
 			initial={{ opacity: 0, y: 20 }}
 			animate={{ opacity: 1, y: 0 }}
@@ -52,7 +59,7 @@ const ProductsList = () => {
 				</thead>
 
 				<tbody className='bg-gray-800 divide-y divide-gray-700'>
-					{products?.map((product) => (
+					{products?.slice(0, visibleCount).map((product) => (
 						<tr key={product._id} className='hover:bg-gray-700'>
 							<td className='px-6 py-4 whitespace-nowrap'>
 								<div className='flex items-center'>
@@ -96,6 +103,19 @@ const ProductsList = () => {
 					))}
 				</tbody>
 			</table>
+		</motion.div>
+		<div className="flex justify-center items-center mt-4">
+			{
+				products?.length > visibleCount && (
+					<button
+						onClick={loadMore}
+						className="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded"
+					>
+						Load More
+					</button>
+				)
+			}
+		</div>
 		</motion.div>
 	);
 };

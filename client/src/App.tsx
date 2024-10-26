@@ -68,7 +68,7 @@ function App() {
 					<Route path='/services' element={<ServicesPage />} />
 					<Route path='/portfolio' element={<PortfolioPage />} />
 				</Routes>
-				<Footer/>
+					<Footer/>
 			</div>
 			<Toaster />
 		</div>
