@@ -25,6 +25,7 @@ export const useOrderStore = create<IOrderStore>((set) => ({
         set({ loadingCustomerOrder: true });
         try {
             const res = await axiosInstance.get("/orders/customer-orders");
+            console.log(res.data, "List of customer orders from store")
             set({ customerOrder: res.data.orders });
             set({ loadingCustomerOrder: false });
         } catch (error: unknown) {

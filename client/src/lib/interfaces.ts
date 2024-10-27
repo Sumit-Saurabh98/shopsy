@@ -47,13 +47,11 @@ export interface ICoupon {
 
 interface Product {
   productId: {
-    _id: string;
     name: string;
     description: string;
     price: number;
     image: string;
     category: string;
-    isFeatured: boolean;
     createdAt: string;
     updatedAt: string; 
     v: number;
