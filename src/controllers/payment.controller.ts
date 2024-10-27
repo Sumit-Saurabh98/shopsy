@@ -112,7 +112,7 @@ export const checkoutSuccess = async (req: Request, res: Response) => {
 
 				// update in the redis store
 
-				const updatedOrders = await Order.find().populate({
+				const updatedOrders = await Order.find({userId}).populate({
 					path: 'products.productId',
 					model: 'Product'
 				})

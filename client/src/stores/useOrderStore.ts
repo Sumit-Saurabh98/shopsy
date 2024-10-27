@@ -70,6 +70,8 @@ export const useOrderStore = create<IOrderStore>((set) => ({
         toast.success("Order status updated successfully!");
       }
 
+      window.location.reload();
+
         } catch (error: unknown) {
             console.error(error);
             set({ loadingAllOrder: false });

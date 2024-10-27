@@ -1,10 +1,8 @@
 
-import { useState } from "react";
 import { useOrderStore } from "../stores/useOrderStore";
 import LoadingSpinner from "./LoadingSpinner";
 
-const OrdersTab = () => {
-  const [orderStatus, setOrderStatus] = useState("pending");
+const OrdersTab = () => {;
   const { allOrder, loadingAllOrder, orderStatusChanged } = useOrderStore();
 
   const getStatusColor = (status: string) => {
@@ -82,12 +80,11 @@ const OrdersTab = () => {
                 </td>
                 <td className="border border-emerald-400 px-4 py-2">
                   <select
-                  className={`${getStatusColor(orderStatus)} px-2 py-2`}
-                    value={orderStatus}
-                    onChange={(e) => {
-                      handleStatusChange(order._id, e.target.value);
-                      setOrderStatus(e.target.value);
-                    }}
+                  className={`border border-emerald-400 text-black ${getStatusColor(
+                      order.orderStatus
+                    )}`}
+                    value={order.orderStatus}
+                    onChange={(e) => handleStatusChange(order._id, e.target.value)}
                   >
                     <option value="pending">Pending</option>
                     <option value="accepted">Accepted</option>
