@@ -16,7 +16,7 @@ export const customerOrders = async (req: Request, res: Response) => {
     const orders = await Order.find({ userId }).populate({
       path: 'products.productId',
       model: 'Product',
-      select: 'name price description image category' // Add fields you want to populate
+      select: 'name price description image category'
     });
     await redis.set(
       `customer_orders_${userId}`,

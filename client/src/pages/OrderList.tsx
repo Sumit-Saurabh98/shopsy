@@ -5,6 +5,8 @@ import { motion } from "framer-motion";
 const OrderList = () => {
   const { customerOrder, loadingCustomerOrder } = useOrderStore();
 
+  console.log(customerOrder, "OrderList for customer orders");
+
   // Function to determine the status circle color
   const getStatusColor = (status: string) => {
     switch (status) {
