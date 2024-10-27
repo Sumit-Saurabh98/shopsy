@@ -112,12 +112,12 @@ export const checkoutSuccess = async (req: Request, res: Response) => {
 
 				// update in the redis store
 
-				const cachedOrders = await redis.get(`customer_orders_${userId}`);
-				if (cachedOrders) {
-					const orders = JSON.parse(cachedOrders);
-					orders.push(newOrder);
-					await redis.set(`customer_orders_${userId}`, JSON.stringify(orders), "EX", 36000);
-				}
+				const updatedOrders = await Order.find().populate({
+					path: 'products.productId',
+					model: 'Product'
+				})
+
+				await redis.set(`customer_orders_${userId}`, JSON.stringify(updatedOrders), "EX", 36000);
 
                 res.status(200).json({
                     success: true, 

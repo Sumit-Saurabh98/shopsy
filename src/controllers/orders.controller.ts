@@ -7,22 +7,27 @@ export const customerOrders = async (req: Request, res: Response) => {
   const userId = (req.user as IUser)?._id;
 
   try {
-    // check in the redis store
+    // Check in the Redis store
     const customerOrders = await redis.get(`customer_orders_${userId}`);
     if (customerOrders) {
       return res.json({ orders: JSON.parse(customerOrders) });
     }
 
-    const orders = await Order.find({ userId }).populate({
-      path: 'products.productId',
-      model: 'Product',
-      select: 'name price description image category'
-    });
+    // Fetch orders and populate product details
+    const orders = await Order.find({ userId })
+      .populate({
+        path: 'products.productId',
+        model: 'Product' 
+      });
+
+      console.log(orders);
+
+    // Cache the orders in Redis
     await redis.set(
       `customer_orders_${userId}`,
       JSON.stringify(orders),
       "EX",
-      36000
+      36000 // Set expiration time as needed
     );
 
     res.json({ orders });
@@ -30,7 +35,7 @@ export const customerOrders = async (req: Request, res: Response) => {
     console.error("Error in customerOrders:", error);
     res.status(500).json({ message: "Internal server error" });
   }
-};
+}
 
 // fetch all the orders for the admin
 

@@ -76,6 +76,7 @@ export const useCartStore = create<ICartStore>((set, get) => ({
         try {
             await axiosInstance.delete(`/cart/clear-cart`);
             set({ cart: [], coupon: null, total: 0, subtotal: 0 });
+            window.location.reload();
         } catch (error) {
             console.error(error);
             const axiosError = error as {
