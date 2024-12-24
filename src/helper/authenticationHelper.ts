@@ -1,7 +1,6 @@
 import dotenv from "dotenv";
 dotenv.config();
 import jwt from "jsonwebtoken";
-import redis from "../lib/redis.js";
 import { Response } from "express";
 
 export const generateToken = (
@@ -16,13 +15,6 @@ export const generateToken = (
   });
 
   return { accessToken, refreshToken };
-};
-
-export const storeRefreshToken = async (
-  _id: string,
-  refreshToken: string
-): Promise<void> => {
-  await redis.set(`refreshToken:${_id}`, refreshToken, "EX", 60 * 60 * 24 * 7);
 };
 
 export const setCookies = (

@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import { IUser } from "../lib/interfaces";
 import User from "../models/user.model.js";
-import mongoose from "mongoose";
 import Product from "../models/product.model.js";
 
 export const addToCart = async (req: Request, res: Response) => {

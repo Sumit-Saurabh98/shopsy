@@ -3,8 +3,7 @@ import dotenv from "dotenv";
 dotenv.config();
 import jwt from "jsonwebtoken";
 import User from "../models/user.model.js";
-import { generateToken, storeRefreshToken, setCookies } from "../helper/authenticationHelper.js";
-import redis from "../lib/redis.js";
+import { generateToken, setCookies } from "../helper/authenticationHelper.js";
 
 
 export const signup = async (req: Request, res: Response) => {
@@ -24,8 +23,6 @@ export const signup = async (req: Request, res: Response) => {
 
     // authenticate
     const { accessToken, refreshToken } = generateToken(newUser._id.toString());
-
-    await storeRefreshToken(newUser._id.toString(), refreshToken);
 
     setCookies(res, accessToken, refreshToken);
 
@@ -55,7 +52,6 @@ export const login = async (req: Request, res: Response) => {
       return res.status(401).json({ message: "Invalid email or password" });
     }
     const { accessToken, refreshToken } = generateToken(user._id.toString());
-    await storeRefreshToken(user._id.toString(), refreshToken);
     setCookies(res, accessToken, refreshToken);
     res.status(200).json({
       user: {
@@ -80,7 +76,6 @@ export const logout = async (req: Request, res: Response) => {
         }
 
         const decode = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET!) as jwt.JwtPayload;
-        await redis.del(`refreshToken:${decode._id}`);
         res.clearCookie("_shopsy_accessToken");
         res.clearCookie("_shopsy_refreshToken");
         res.status(200).json({ message: "Logged out successful" });
@@ -97,15 +92,6 @@ export const refreshAccessToken = async (req: Request, res: Response) => {
             return res.status(401).json({ message: "Unauthorized user" });
         }
         const decode = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET!) as jwt.JwtPayload;
-        
-        const storedRefreshToken = await redis.get(`refreshToken:${decode._id}`);
-        if (!storedRefreshToken) {
-            return res.status(401).json({ message: "Unauthorized user" });
-        }
-        
-        if(storedRefreshToken !== refreshToken) {
-            return res.status(401).json({ message: "Unauthorized user" });
-        }
 
         const { accessToken } = generateToken(decode._id.toString());
         setCookies(res, accessToken, refreshToken);

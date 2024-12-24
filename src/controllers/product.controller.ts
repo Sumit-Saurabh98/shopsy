@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import Product from "../models/product.model.js";
-import redis from "../lib/redis.js";
 import cloudinary from "../lib/cloudinary.js";
 
 export const getAllProducts = async (req: Request, res: Response) => {
@@ -15,10 +14,6 @@ export const getAllProducts = async (req: Request, res: Response) => {
 
 export const getFeaturedProducts = async (req: Request, res: Response) => {
   try {
-    const cachedProducts = await redis.get("featured_products");
-    if (cachedProducts) {
-      return res.json({ featuredProducts: JSON.parse(cachedProducts) });
-    }
 
     // .lean() to return a plain JavaScript object, which if good for performance
     const featuredProducts = await Product.find({ isFeatured: true }).lean();
@@ -26,14 +21,6 @@ export const getFeaturedProducts = async (req: Request, res: Response) => {
     if (!featuredProducts.length) {
       return res.status(404).json({ message: "No featured products found" });
     }
-
-    // Cache the result in Redis
-    await redis.set(
-      "featured_products",
-      JSON.stringify(featuredProducts),
-      "EX",
-      3600
-    );
 
     res.json(featuredProducts);
   } catch (error) {
@@ -149,8 +136,6 @@ export const toggleFeaturedProduct = async (req: Request, res: Response) =>{
 
         product.isFeatured = !product.isFeatured;
         const updatedProduct = await product.save();
-
-        // Cache the updated product in Redis
         await updateFeaturedProductsCache();
 
         res.status(200).json({ product: updatedProduct });
@@ -162,8 +147,7 @@ export const toggleFeaturedProduct = async (req: Request, res: Response) =>{
 
 async function updateFeaturedProductsCache(){
     try {
-        const featuredProducts = await Product.find({ isFeatured: true }).lean();
-        await redis.set("featured_products", JSON.stringify(featuredProducts));
+        await Product.find({ isFeatured: true }).lean();
     } catch (error) {
         console.log("Error in updateFeaturedProductsCache:", error);
     }

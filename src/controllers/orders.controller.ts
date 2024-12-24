@@ -1,17 +1,11 @@
 import { Request, Response } from "express";
 import Order from "../models/order.model.js";
-import redis from "../lib/redis.js";
 import { IUser } from "../lib/interfaces.js";
 
 export const customerOrders = async (req: Request, res: Response) => {
   const userId = (req.user as IUser)?._id;
 
   try {
-    // Check in the Redis store
-    const customerOrders = await redis.get(`customer_orders_${userId}`);
-    if (customerOrders) {
-      return res.json({ orders: JSON.parse(customerOrders) });
-    }
 
     // Fetch orders and populate product details
     const orders = await Order.find({ userId })
@@ -19,16 +13,6 @@ export const customerOrders = async (req: Request, res: Response) => {
         path: 'products.productId',
         model: 'Product' 
       });
-
-      console.log(orders);
-
-    // Cache the orders in Redis
-    await redis.set(
-      `customer_orders_${userId}`,
-      JSON.stringify(orders),
-      "EX",
-      36000 // Set expiration time as needed
-    );
 
     res.json({ orders });
   } catch (error) {
@@ -58,24 +42,6 @@ export const updateOrderStatus = async (req: Request, res: Response) => {
       return res
         .status(404)
         .json({ message: "orderId or orderStatus is required" });
-    }
-
-    // update the order status in the redis before updating in db
-    const order = await Order.findOne({ _id: orderId });
-    const userId = order?.userId;
-    const orderInRedis = await redis.get(`customer_orders_${userId}`);
-    if (orderInRedis) {
-      const orders: { _id: string; orderStatus?: string }[] =
-        JSON.parse(orderInRedis);
-      const updatedOrders = orders.map((o) =>
-        o._id.toString() === orderId ? { ...o, orderStatus } : o
-      );
-      await redis.set(
-        `customer_orders_${userId}`,
-        JSON.stringify(updatedOrders),
-        "EX",
-        36000
-      );
     }
     
 

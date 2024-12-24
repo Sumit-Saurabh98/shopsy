@@ -3,7 +3,6 @@ dotenv.config();
 import { Request, Response } from "express";
 import Coupon from "../models/coupon.model.js";
 import stripe from "../lib/stripe.js";
-import redis from "../lib/redis.js";
 import { createNewCoupon, createStripeCoupon } from "../helper/stripeHelper.js";
 import Order from "../models/order.model.js";
 import { IUser } from "../lib/interfaces.js";
@@ -110,14 +109,10 @@ export const checkoutSuccess = async (req: Request, res: Response) => {
                 });
                 await newOrder.save();
 
-				// update in the redis store
-
-				const updatedOrders = await Order.find({userId}).populate({
+				await Order.find({userId}).populate({
 					path: 'products.productId',
 					model: 'Product'
 				})
-
-				await redis.set(`customer_orders_${userId}`, JSON.stringify(updatedOrders), "EX", 36000);
 
                 res.status(200).json({
                     success: true, 
