@@ -22,7 +22,7 @@ export const getFeaturedProducts = async (req: Request, res: Response) => {
       return res.status(404).json({ message: "No featured products found" });
     }
 
-    res.json(featuredProducts);
+    res.status(200).json({products:featuredProducts});
   } catch (error) {
     console.error("Error in getFeaturedProducts:", error);
     res.status(500).json({ message: "Server error" });

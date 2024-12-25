@@ -54,6 +54,8 @@ export const useProductStore = create<IProductStore>((set) => ({
     set({ loading: true });
     try {
       const res = await axiosInstance.get(`/products`);
+
+      
       set({ products: res.data.products });
       set({ loading: false });
     } catch (error: unknown) {
@@ -70,6 +72,8 @@ export const useProductStore = create<IProductStore>((set) => ({
     set({ loading: true });
     try {
       const res = await axiosInstance.get(`/products/category/${category}`);
+
+      
       set({ products: res.data.products });
       set({ loading: false });
     } catch (error: unknown) {
@@ -124,7 +128,7 @@ export const useProductStore = create<IProductStore>((set) => ({
 		set({ loading: true });
 		try {
 			const response = await axiosInstance.get("/products/featured");
-			set({ products: response.data.featuredProducts, loading: false });
+			set({ products: response.data.products, loading: false });
 		} catch (error: unknown) {
       console.error(error);
       set({ loading: false });
